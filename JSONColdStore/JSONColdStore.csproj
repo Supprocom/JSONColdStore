@@ -4,11 +4,13 @@
     <AssemblyName>JSONColdStore</AssemblyName>
     <RootNamespace>JSONColdStore</RootNamespace>
     <PackageId>Supprocom.JSONColdStore</PackageId>
-    <Version>0.1.0-alpha.10</Version>
+    <Version>0.1.1</Version>
     <Title>JSONColdStore</Title>
     <Authors>mkn8rn</Authors>
-    <Description>EF Core provider foundation for durable local JSON cold storage.</Description>
-    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+    <PackageLicenseFile>PACKAGE-LICENSE.txt</PackageLicenseFile>
+    <Description>Commercial or AGPL-3.0. EF Core provider foundation for durable local JSON cold storage.</Description>
+    <PackageReleaseNotes>Dual-licensed: Commercial or AGPL-3.0. Adds the Supprocom Commercial License as an alternative to the AGPL-3.0.
+Security support until November 2031</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Supprocom/JSONColdStore</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Supprocom/JSONColdStore</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -30,4 +32,31 @@
     <None Include="..\NOTICE" Pack="true" PackagePath="NOTICE" />
   </ItemGroup>
 
+  <!-- The package license file is generated from the repository's COMMERCIAL-LICENSE and LICENSE files. -->
+  <PropertyGroup>
+    <SupprocomPackageLicensePath>$(BaseIntermediateOutputPath)PACKAGE-LICENSE.txt</SupprocomPackageLicensePath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(SupprocomPackageLicensePath)" Pack="true" PackagePath="PACKAGE-LICENSE.txt" Visible="false" />
+  </ItemGroup>
+  <Target Name="WriteSupprocomPackageLicense" BeforeTargets="_GetPackageFiles;GenerateNuspec">
+    <PropertyGroup>
+      <_SupprocomCommercialText>$([MSBuild]::Escape($([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../COMMERCIAL-LICENSE').TrimEnd())))</_SupprocomCommercialText>
+      <_SupprocomAgplText>$([MSBuild]::Escape($([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../LICENSE').TrimEnd())))</_SupprocomAgplText>
+      <_SupprocomPackageLicenseText>Commercial or AGPL-3.0
+
+This package is available under your choice of two licenses:
+- the Supprocom Commercial License 1.0, for businesses with a registered Supprocom sponsorship (https://github.com/sponsors/Supprocom)%3B or
+- the GNU Affero General Public License, version 3 (AGPL-3.0).
+
+Both texts follow. For each version, the COMMERCIAL-LICENSE file in the project's GitHub repository at the commit this package was built from prevails over this copy.
+
+==============================================================================
+$(_SupprocomCommercialText)
+
+==============================================================================
+$(_SupprocomAgplText)</_SupprocomPackageLicenseText>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(SupprocomPackageLicensePath)" Lines="$(_SupprocomPackageLicenseText)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+  </Target>
 </Project>
